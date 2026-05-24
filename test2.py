@@ -1,5 +1,6 @@
 import os
 from dataclasses import dataclass
+import asyncio
 
 folder = os.path.dirname(os.path.abspath(__file__))
 
@@ -32,6 +33,19 @@ class PDFScanner:
 
     def count(self) -> int:
         return len(self.get_pdf_files())
+
+async def scan_folder(folder):
+        scanner = PDFScanner(folder)
+        return scanner.count()
+
+async def scan_main():
+    results = await asyncio.gather(
+        scan_folder("/Users/shogotsumagari/Desktop/practice_Mac"),
+        scan_folder("/Users/shogotsumagari/Desktop"),
+    )
+    print(results)
+
+asyncio.run(scan_main())
 
 def main():
     PDFApp = PDFScanner(folder)
